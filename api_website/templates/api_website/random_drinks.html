@@ -1,0 +1,21 @@
+{% extends "api_website/base.html" %}
+{% block image %}
+    <h1>How about : {{ drink.drink_name }} </h1>
+    <img class="rounded float-end" src="{{ drink.drink_image }}">
+{% endblock image %}
+{% block content %}
+    <p>Glass : {{ drink.glass }} </p>
+    {% if drink.first_ingredient %}
+        <p>First ingredient : {{ drink.first_ingredient }} {{ drink.first_ingredient_measurements }} </p>
+    {% endif %}
+    {% if drink.second_ingredient %}
+        <p>Second ingredient : {{ drink.second_ingredient }} {{ drink.second_ingredient_measurements }}</p>
+    {% endif %}
+    {% if drink.third_ingredient %}
+        <p>Third ingredient : {{ drink.third_ingredient }} {{ drink.third_ingredient_measurements }}</p>
+    {% endif %}
+    {% if drink.fourth_ingredient %}
+        <p>Fourth ingredient : {{ drink.fourth_ingredient }} {{ drink.fourth_ingredient_measurements }} </p>
+    {% endif %}
+    <p>How to make it : {{ drink.instructions }} </p>
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends "api_website/base.html" %}
+{% block content %}
+<h1>What would you like?</h1>
+{% if not drinks %}
+    <form action="/cocktails/" method="post">
+        {% csrf_token %}
+        {{ form.alcohol.label }}
+        {{ form.alcohol }}
+        <input type="submit" value="Submit">
+    </form>
+    {% if message %}
+        {{ message }}
+    {% endif %}
+{% else %}
+    {% for drink in page_obj %}
+    <img  class="rounded float-end" src="{{ drink.drink_image }}">
+    <p>Drink name : {{ drink.drink_name }}</p>
+    <p>Glass : {{ drink.glass }} </p>
+    {% if drink.first_ingredient %}
+        <p>First ingredient : {{ drink.first_ingredient }} {{ drink.first_ingredient_measurements }} </p>
+    {% endif %}
+    {% if drink.second_ingredient %}
+        <p>Second ingredient : {{ drink.second_ingredient }} {{ drink.second_ingredient_measurements }}</p>
+    {% endif %}
+    {% if drink.third_ingredient %}
+        <p>Third ingredient : {{ drink.third_ingredient }} {{ drink.third_ingredient_measurements }}</p>
+    {% endif %}
+    {% if drink.fourth_ingredient %}
+        <p>Fourth ingredient : {{ drink.fourth_ingredient }} {{ drink.fourth_ingredient_measurements }} </p>
+    {% endif %}
+    <p>How to make it : {{ drink.instructions }} </p>
+    {% endfor %}
+    <nav>
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link" href="?alcohol={{ alcohol }}&page=1">First</a></li>
+                <li class="page-item"><a class="page-link" href="?alcohol={{ alcohol }}&page={{ page_obj.previous_page_number }}">Previous</a></li>
+            {% endif %}
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link" href='?alcohol={{ alcohol }}&page={{ page_obj.next_page_number }}' >Next</a></li>
+                <li class="page-item"><a class="page-link" href="?alcohol={{ alcohol }}&page={{ page_obj.paginator.num_pages }}">Last</a></li>
+            {% endif %}
+        </span>
+    </ul>
+    </nav>
+{% endif %}
+{% endblock content %}
