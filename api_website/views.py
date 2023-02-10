@@ -4,12 +4,14 @@ from .forms import AlcoholForm
 from django.core.paginator import Paginator
 from .models import Chrab
 from django.db.models import Q
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.views.generic.list import ListView
 
 # Create your views here.
 
 count = Chrab.objects.count()
+
+class ChrabListView(ListView):
+    model = Chrab
 
 
 def home(request):
@@ -66,16 +68,9 @@ def random_drinks(request):
     return render(request, "api_website/random_drinks.html", context)
 
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-    else:
-        form = UserCreationForm()
-    return render(request, 'api_website/register.html', {'form': form})
 
 
+
+def add_drinks(request):
+    return render(request, 'api_website/add_drinks.html')
 
