@@ -5,10 +5,12 @@ from django.core.paginator import Paginator
 from .models import Chrab
 from django.db.models import Q
 from django.views.generic.list import ListView
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 count = Chrab.objects.count()
+
 
 class ChrabListView(ListView):
     model = Chrab
@@ -68,9 +70,6 @@ def random_drinks(request):
     return render(request, "api_website/random_drinks.html", context)
 
 
-
-
-
+@login_required(login_url='login')
 def add_drinks(request):
     return render(request, 'api_website/add_drinks.html')
-
