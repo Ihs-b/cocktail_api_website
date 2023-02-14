@@ -1,19 +1,16 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from random import randint
 from .forms import AlcoholForm
 from django.core.paginator import Paginator
 from .models import Chrab
 from django.db.models import Q
-from django.views.generic.list import ListView
+from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 count = Chrab.objects.count()
-
-
-class ChrabListView(ListView):
-    model = Chrab
 
 
 def home(request):
@@ -70,6 +67,24 @@ def random_drinks(request):
     return render(request, "api_website/random_drinks.html", context)
 
 
-@login_required(login_url='login')
-def add_drinks(request):
-    return render(request, 'api_website/add_drinks.html')
+class ChrabCreateView(LoginRequiredMixin, CreateView):
+    login_url = "/login/"
+    model = Chrab
+    template_name = 'api_website/add_drinks.html'
+    # fields = '__all__'
+    fields = ["drink_name",
+              "glass",
+              "first_ingredient",
+              "second_ingredient",
+              "third_ingredient",
+              "fourth_ingredient",
+              "instructions", "drink_image",
+              "first_ingredient_measurements",
+              "second_ingredient_measurements",
+              "third_ingredient_measurements",
+              "fourth_ingredient_measurements",
+              "date"]
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)

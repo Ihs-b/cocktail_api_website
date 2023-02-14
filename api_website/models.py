@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils import timezone
 import requests
+from django.urls import reverse
+from django.contrib.auth.models import User
 
 cocktail_url = 'https://www.thecocktaildb.com/api/json/v1/1/'
 # random_param = "random.php"
 # ingredient_param = "filter.php?i="
 # id_param = "lookup.php?i="
-letter_param = "search.php?f=a"
+letter_param = "search.php?f=d"
 
 response = requests.get(url=cocktail_url + letter_param)
 data = response.json()["drinks"]
@@ -29,9 +31,14 @@ class Chrab(models.Model):
     third_ingredient_measurements = models.CharField(max_length=400, null=True)
     fourth_ingredient_measurements = models.CharField(max_length=400, null=True)
     date = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return self.drink_name
+
+    def get_absolute_url(self):
+        return reverse('api_website-cocktails')
+
     #     # return self.glass
     #     # return self.first_ingredient
     # return self.second_ingredient
